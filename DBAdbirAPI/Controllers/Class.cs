@@ -1,32 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using AutoMapper;
-using DBAdbirAPI.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using DBAdbir.Models.ViewModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace DBAdbirAPI.Controllers
 {
-    
-    [Route("[controller]")]
-    [ApiController]
-    public class ItemApiControllers : ControllerBase
+    public class Class
     {
-        private readonly ItemApiContext _context;
-        private readonly IMapper _mapper;
-
-        public ItemApiControllers(ItemApiContext context, IMapper mapper)
-        {
-            _mapper = mapper;
-            _context = context;
-        }
         /*
         private static IEnumerable<King> KingArray;
        
@@ -72,38 +52,5 @@ namespace DBAdbirAPI.Controllers
             return KingArray;
         }
         */
-
-        //GET: King
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ItemVM>>> GetItem()
-        {
-            var items = await _context.Items.ToListAsync();
-            return _mapper.Map<List<DBAdbir.Models.Item>, List<ItemVM>>(items);
-        }
-
-        // GET: Item/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
-        {
-
-        }
-
-        // POST: Item
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT: Item/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE: ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

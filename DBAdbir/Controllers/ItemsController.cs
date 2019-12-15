@@ -13,7 +13,7 @@ namespace DBAdbir.Controllers
     public class ItemsController : Controller
     {
         private readonly DBAdbirContext _context; //Dependency injection.
-
+        
         public ItemsController(DBAdbirContext context)
         {
             _context = context;

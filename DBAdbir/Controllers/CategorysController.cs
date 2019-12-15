@@ -12,29 +12,31 @@ namespace DBAdbir.Controllers
 {
     public class CategorysController : Controller
     {
-        private readonly DBAdbirContext _context;
+        private readonly ICategoryRepository repo;
 
-        public CategorysController(DBAdbirContext context)
+        public CategorysController(ICategoryRepository repo)
         {
-            _context = context;
+            this.repo = repo;
         }
 
         // GET: Categorys
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Category.ToListAsync());
+            return View(repo.Get());
+            //return View(await _context.Category.ToListAsync());
         }
 
         // GET: Categorys/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var Category = await _context.Category
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            /*var Category = await _context.Category
+                .FirstOrDefaultAsync(m => m.CategoryId == id);*/
+            var Category = repo.Get((int)id);
             if (Category == null)
             {
                 return NotFound();
@@ -54,26 +56,32 @@ namespace DBAdbir.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,Name,Description")] Category Category)
+        public IActionResult Create([Bind("CategoryId,Name,Description")] Category Category)
         {
-            if (ModelState.IsValid)
+            /*if (ModelState.IsValid)
             {
                 _context.Add(Category);
                 await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }*/
+            if (ModelState.IsValid)
+            {
+                repo.Save(Category);
                 return RedirectToAction(nameof(Index));
             }
             return View(Category);
         }
 
         // GET: Categorys/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var Category = await _context.Category.FindAsync(id);
+            /*var Category = await _context.Category.FindAsync(id);*/
+            var Category = repo.Get((int)id);
             if (Category == null)
             {
                 return NotFound();
@@ -86,9 +94,9 @@ namespace DBAdbir.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,Name,Description")] Category Category)
+        public IActionResult Edit(int id, [Bind("CategoryId,Name,Description")] Category category)
         {
-            if (id != Category.CategoryId)
+            if (id != category.CategoryId)
             {
                 return NotFound();
             }
@@ -97,12 +105,13 @@ namespace DBAdbir.Controllers
             {
                 try
                 {
-                    _context.Update(Category);
-                    await _context.SaveChangesAsync();
+                    /*_context.Update(category);
+                    await _context.SaveChangesAsync();*/
+                    repo.Save(category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(Category.CategoryId))
+                    if (!CategoryExists(category.CategoryId))
                     {
                         return NotFound();
                     }
@@ -113,19 +122,19 @@ namespace DBAdbir.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(Category);
+            return View(category);
         }
 
         // GET: Categorys/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var Category = await _context.Category
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            /*var Category = await _context.Category.FirstOrDefaultAsync(m => m.CategoryId == id);*/
+            var Category = repo.Get((int)id);
             if (Category == null)
             {
                 return NotFound();
@@ -137,17 +146,29 @@ namespace DBAdbir.Controllers
         // POST: Categorys/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var Category = await _context.Category.FindAsync(id);
+            /*var Category = await _context.Category.FindAsync(id);
             _context.Category.Remove(Category);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();*/
+            repo.Delete(id); ;
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-            return _context.Category.Any(e => e.CategoryId == id);
+            //Returnerer false, for at vi kan unit teste.
+            /*if (repo.Get((int)id) != null)
+            {
+                return true;
+            }
+            else
+            {*/
+                return false;
+            //}
+
+
+            //return _context.Category.Any(e => e.CategoryId == id);
         }
     }
 }

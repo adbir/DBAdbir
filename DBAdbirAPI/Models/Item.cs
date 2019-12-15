@@ -12,11 +12,12 @@ namespace DBAdbirAPI.Models
     {
         public int ItemId { get; set; }
         public string Name { get; set; }
+        /*
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         [DataType(DataType.Date)]
         public DateTime CreationDate { get; set; }
-        public long Price { get; set; }
+        public long Price { get; set; }*/
         public string Description { get; set; }
         
 

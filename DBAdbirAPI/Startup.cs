@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using DBAdbirAPI.Data;
+using DBAdbirAPI.Models;
 using AutoMapper;
 
 namespace DBAdbirAPI
@@ -23,16 +23,15 @@ namespace DBAdbirAPI
         }
 
         public IConfiguration Configuration { get; }
-
+        
+               
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+                       
+            services.AddDbContext<ItemApiContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
-            
-
-            services.AddDbContext<DBAdbirAPIContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DBAdbirAPIContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

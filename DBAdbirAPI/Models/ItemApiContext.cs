@@ -11,6 +11,6 @@ namespace DBAdbirAPI.Models
         public ItemApiContext(DbContextOptions<ItemApiContext> options) : base(options)
         { }
 
-        public DbSet<Models.Item> Items { get; set; }
+        public DbSet<DBAdbir.Models.Item> Items { get; set; }
     }
 }
